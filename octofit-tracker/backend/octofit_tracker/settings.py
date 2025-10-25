@@ -27,6 +27,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# Allow all hosts
+ALLOWED_HOSTS = ['*']
+
 
 # Application definition
 
@@ -39,6 +42,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
+# Add required apps
+INSTALLED_APPS += [
+    'rest_framework',
+    'djongo',
+    'corsheaders',
+    'octofit_tracker',
+]
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -48,6 +59,9 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+# Add CORS middleware
+MIDDLEWARE.insert(1, 'corsheaders.middleware.CorsMiddleware')
 
 ROOT_URLCONF = 'octofit_tracker.urls'
 
@@ -77,6 +91,23 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+
+# Djongo MongoDB connection
+DATABASES = {
+    'default': {
+        'ENGINE': 'djongo',
+        'NAME': 'octofit_db',
+        'ENFORCE_SCHEMA': False,
+        'CLIENT': {
+            'host': 'mongodb://localhost:27017',
+            'port': 27017,
+            'username': '',
+            'password': '',
+            'authSource': '',
+            'authMechanism': '',
+        },
     }
 }
 
@@ -116,6 +147,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
+
+# CORS settings
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_HEADERS = ['*']
+CORS_ALLOW_METHODS = ['*']
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
